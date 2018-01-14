@@ -213,6 +213,13 @@ function ModalRemote(modalId) {
      */
     function successRemoteResponse(response) {
 
+        // Close modal then redirect to a new url if response contains forceRedirect field
+        if (response.forceRedirect !== undefined && response.forceRedirect) {
+            this.hide();
+            window.location.href = response.forceRedirect;
+            return;
+        }
+
         // Reload datatable if response contain forceReload field
         if (response.forceReload !== undefined && response.forceReload) {
             if (response.forceReload == 'true') {
@@ -243,9 +250,9 @@ function ModalRemote(modalId) {
 
         if ($(this.content).find("form")[0] !== undefined) {
             this.setupFormSubmit(
-                $(this.content).find("form")[0],
-                $(this.footer).find('[type="submit"]')[0]
-            );
+                    $(this.content).find("form")[0],
+                    $(this.footer).find('[type="submit"]')[0]
+                    );
         }
     }
 
@@ -275,10 +282,10 @@ function ModalRemote(modalId) {
                 }
 
                 instance.doRemote(
-                    $(modalForm).attr('action'),
-                    $(modalForm).hasAttr('method') ? $(modalForm).attr('method') : 'GET',
-                    data
-                );
+                        $(modalForm).attr('action'),
+                        $(modalForm).hasAttr('method') ? $(modalForm).attr('method') : 'GET',
+                        data
+                        );
             });
         }
     };
@@ -302,46 +309,46 @@ function ModalRemote(modalId) {
             this.setTitle(title);
         }
         // Add form for user input if required
-        this.setContent('<form id="ModalRemoteConfirmForm">'+message);
+        this.setContent('<form id="ModalRemoteConfirmForm">' + message);
 
         var instance = this;
         if (okLabel !== false) {
-	        this.addFooterButton(
-	            okLabel === undefined ? this.defaults.okLabel : okLabel,
-	            'submit',
-	            'btn btn-primary',
-	            function (e) {
-	                var data;
-	
-	                // Test if browser supports FormData which handles uploads
-	                if (window.FormData) {
-	                    data = new FormData($('#ModalRemoteConfirmForm')[0]);
-	                    if (typeof selectedIds !== 'undefined' && selectedIds)
-	                        data.append('pks', selectedIds.join());
-	                } else {
-	                    // Fallback to serialize
-	                    data = $('#ModalRemoteConfirmForm');
-	                    if (typeof selectedIds !== 'undefined' && selectedIds)
-	                        data.pks = selectedIds;
-	                    data = data.serializeArray();
-	                }
-	
-	                instance.doRemote(
-	                    dataUrl,
-	                    dataRequestMethod,
-	                    data
-	                );
-	            }
-	        );
+            this.addFooterButton(
+                    okLabel === undefined ? this.defaults.okLabel : okLabel,
+                    'submit',
+                    'btn btn-primary',
+                    function (e) {
+                        var data;
+
+                        // Test if browser supports FormData which handles uploads
+                        if (window.FormData) {
+                            data = new FormData($('#ModalRemoteConfirmForm')[0]);
+                            if (typeof selectedIds !== 'undefined' && selectedIds)
+                                data.append('pks', selectedIds.join());
+                        } else {
+                            // Fallback to serialize
+                            data = $('#ModalRemoteConfirmForm');
+                            if (typeof selectedIds !== 'undefined' && selectedIds)
+                                data.pks = selectedIds;
+                            data = data.serializeArray();
+                        }
+
+                        instance.doRemote(
+                                dataUrl,
+                                dataRequestMethod,
+                                data
+                                );
+                    }
+            );
         }
 
         this.addFooterButton(
-            cancelLabel === undefined ? this.defaults.cancelLabel : cancelLabel,
-            'button',
-            'btn btn-default pull-left',
-            function (e) {
-                this.hide();
-            }
+                cancelLabel === undefined ? this.defaults.cancelLabel : cancelLabel,
+                'button',
+                'btn btn-default pull-left',
+                function (e) {
+                    this.hide();
+                }
         );
 
     }
@@ -370,22 +377,22 @@ function ModalRemote(modalId) {
          * Show either a local confirm modal or get modal content through ajax
          */
         if ($(elm).hasAttr('data-confirm-title') || $(elm).hasAttr('data-confirm-message')) {
-            this.confirmModal (
-                $(elm).attr('data-confirm-title'),
-                $(elm).attr('data-confirm-message'),
-                $(elm).attr('data-confirm-alert') ? false : $(elm).attr('data-confirm-ok'),
-                $(elm).attr('data-confirm-cancel'),
-                $(elm).hasAttr('data-modal-size') ? $(elm).attr('data-modal-size') : 'normal',
-                $(elm).hasAttr('href') ? $(elm).attr('href') : $(elm).attr('data-url'),
-                $(elm).hasAttr('data-request-method') ? $(elm).attr('data-request-method') : 'GET',
-                bulkData
-            )
+            this.confirmModal(
+                    $(elm).attr('data-confirm-title'),
+                    $(elm).attr('data-confirm-message'),
+                    $(elm).attr('data-confirm-alert') ? false : $(elm).attr('data-confirm-ok'),
+                    $(elm).attr('data-confirm-cancel'),
+                    $(elm).hasAttr('data-modal-size') ? $(elm).attr('data-modal-size') : 'normal',
+                    $(elm).hasAttr('href') ? $(elm).attr('href') : $(elm).attr('data-url'),
+                    $(elm).hasAttr('data-request-method') ? $(elm).attr('data-request-method') : 'GET',
+                    bulkData
+                    )
         } else {
             this.doRemote(
-                $(elm).hasAttr('href') ? $(elm).attr('href') : $(elm).attr('data-url'),
-                $(elm).hasAttr('data-request-method') ? $(elm).attr('data-request-method') : 'GET',
-                bulkData
-            );
+                    $(elm).hasAttr('href') ? $(elm).attr('href') : $(elm).attr('data-url'),
+                    $(elm).hasAttr('data-request-method') ? $(elm).attr('data-request-method') : 'GET',
+                    bulkData
+                    );
         }
     }
 } // End of Object
