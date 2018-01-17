@@ -38,9 +38,9 @@ use kartik\widgets\ActiveForm;
 <?php foreach ($generator->getColumnNames() as $attribute) {
     if (in_array($attribute, $safeAttributes)) {
         if ('status' == $attribute) {
-            echo '    <?= Html::label($model->getAttributeLabel(\'' . $attribute . '\'), $model->getAttributeLabel(\'' . $attribute . '\')) ?>\n';
+            echo '    <?= Html::label($model->getAttributeLabel(\'' . $attribute . '\'), $model->getAttributeLabel(\'' . $attribute . "')) ?>\n";
             echo '    <?= $form->field($model, \'' . $attribute . '\')->radioButtonGroup([1 => ' . $generator->generateString('Active') . ', 0 => ' . $generator->generateString('Inactive') . '], [' .
-                      '\'class\' => \'btn-group btn-group-justified\', \'itemOptions\' => [\'labelOptions\' => [\'class\' => \'btn btn-default\']]])->label(false); ?>';
+                      '\'class\' => \'btn-group btn-group-justified\', \'itemOptions\' => [\'labelOptions\' => [\'class\' => \'btn btn-default\']]])->label(false); ?>' . "\n\n";
         } else {
             echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
         } 
