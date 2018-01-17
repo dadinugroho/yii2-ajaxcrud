@@ -75,7 +75,7 @@ CrudAsset::register($this);
                 ]),
                 'after'=>BulkButtonWidget::widget([
                             'buttons'=>Html::a(Html::icon('glyphicon glyphicon-trash') . Yii::t('app', ' Delete all'),
-                                ["bulkdelete"] ,
+                                ["bulk-delete"] ,
                                 [
                                     "class"=>"btn btn-danger btn-xs",
                                     'role'=>'modal-remote-bulk',

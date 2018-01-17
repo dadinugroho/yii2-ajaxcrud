@@ -161,6 +161,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             if ($model->load($request->post()) && $model->save()) {
 
                 $links = $this->composeNavLinks($model->id);
+                
+                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully created.') ?>);
 
                 return [
                     'forceReload' => '#crud-datatable-pjax',
@@ -194,6 +196,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
+                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully created.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
                 return $this->render('create', [
@@ -225,6 +228,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             
             if ($model->load($request->post()) && $model->save()) {
+                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully updated.') ?>);
                 return [
                     'forceReload' => '#crud-datatable-pjax',
                     'title' => Yii::t('app', '<?= $modelClass ?> ') . $model->name,
@@ -257,6 +261,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
+                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully deleted.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
                 return $this->render('update', [
@@ -305,7 +310,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         } catch (IntegrityException $e) {
             $transaction->rollBack();
             return [
-                'title' => Yii::t('app', 'Delete <?= $modelClass ?>'),
+            'title' => Yii::t('app', 'Delete <?= strtolower($modelClass) ?>'),
                 'size' => 'large',
                 'content' => Html::tag('span', Yii::t('app', 'Integrity error!'), ['class' => 'text-error']),
                 'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
@@ -313,7 +318,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         } catch (Exception $e) {
             $transaction->rollBack();
             return [
-                'title' => Yii::t('app', 'Delete <?= $modelClass ?>'),
+                'title' => Yii::t('app', 'Delete <?= strtolower($modelClass) ?>'),
                 'size' => 'large',
                 'content' => Html::tag('span', Yii::t('app', 'Exception error!'), ['class' => 'text-error']),
                 'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
@@ -336,6 +341,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             $model = $this->findModel($pk);
             $model->delete();
         }
+        
+        Yii::$app->getSession()->setFlash('success', <?= $generator->generateString('Items are successfully deleted.') ?>);
 
         if($request->isAjax){
             /*
