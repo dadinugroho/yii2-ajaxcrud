@@ -25,7 +25,7 @@ use kartik\alert\AlertBlock;
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', '<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>');
+$this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>;
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
@@ -55,9 +55,9 @@ CrudAsset::register($this);
             'toolbar'=> [
                 ['content'=>
                     Html::a(Html::icon('glyphicon glyphicon-plus'), ['create'],
-                    ['role'=>'modal-remote','title'=> 'Create new <?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>','class'=>'btn btn-default']).
+                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . Inflector::camel2id(StringHelper::basename($generator->modelClass))) ?>','class'=>'btn btn-default']).
                     Html::a(Html::icon('glyphicon glyphicon-repeat'), [''],
-                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>Yii::t('app', 'Reset grid')]).
+                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=> <?= $generator->generateString('Reset grid') ?>].
                     '{toggleData}'.
                     '{export}'
                 ],
@@ -81,8 +81,8 @@ CrudAsset::register($this);
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=>Yii::t('app', 'Are you sure?'),
-                                    'data-confirm-message'=>Yii::t('app', 'Are you sure want to delete these items?'),
+                                    'data-confirm-title'=><?= $generator->generateString('Are you sure?') ?>,
+                                    'data-confirm-message'=><?= $generator->generateString('Are you sure want to delete these items?') ?>,
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',

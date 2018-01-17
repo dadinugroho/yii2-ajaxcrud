@@ -125,7 +125,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> Yii::t('app', '<?= $modelClass ?> ' .  $model->name,,
+                    'title'=> Yii::t('app', '<?= $modelClass ?> ' .  $model->name),
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
