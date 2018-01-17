@@ -22,7 +22,12 @@ class Bootstrap implements BootstrapInterface {
         Yii::setAlias("@dadinugroho/ajaxcrud", __DIR__);
         if ($app->hasModule('gii')) {
             if (!isset($app->getModule('gii')->generators['ajaxcrud'])) {
-                $app->getModule('gii')->generators['ajaxcrud'] = 'dadinugroho\ajaxcrud\generators\Generator';
+                $app->getModule('gii')->generators['ajaxcrud'] = [
+                    'class' => 'dadinugroho\ajaxcrud\generators\Generator',
+                    'templates' => [//setting for out templates
+                        'single' => '@ajaxcrud/generators/single', // template name => path to template
+                    ]
+                ];
             }
         }
     }
