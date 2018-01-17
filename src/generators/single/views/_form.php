@@ -37,7 +37,13 @@ use kartik\widgets\ActiveForm;
     </div>
 <?php foreach ($generator->getColumnNames() as $attribute) {
     if (in_array($attribute, $safeAttributes)) {
-        echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
+        if ('status' == $attribute) {
+            echo '    <?= Html::label($model->getAttributeLabel(\'' . $attribute . '\'), $model->getAttributeLabel(\'' . $attribute . '\')) ?>\n';
+            echo '    <?= $form->field($model, \'' . $attribute . '\')->radioButtonGroup([1 => ' . $generator->generateString('Active') . ', 0 => ' . $generator->generateString('Inactive') . '], [' .
+                      '\'class\' => \'btn-group btn-group-justified\', \'itemOptions\' => [\'labelOptions\' => [\'class\' => \'btn btn-default\']]])->label(false); ?>';
+        } else {
+            echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
+        } 
     }
 } ?>  
 	<?='<?php if (!Yii::$app->request->isAjax){ ?>'."\n"?>
