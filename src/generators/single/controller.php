@@ -162,7 +162,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
                 $links = $this->composeNavLinks($model->id);
                 
-                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully created.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully created.') ?>);
 
                 return [
                     'forceReload' => '#crud-datatable-pjax',
@@ -196,7 +196,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully created.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully created.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
                 return $this->render('create', [
@@ -228,7 +228,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully updated.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully updated.') ?>);
                 return [
                     'forceReload' => '#crud-datatable-pjax',
                     'title' => Yii::t('app', '<?= $modelClass ?> ') . $model->name,
@@ -261,7 +261,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $name . <?= $generator->generateString(' is successfully deleted.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully deleted.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
                 return $this->render('update', [
@@ -298,7 +298,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 /*
                  *   Process for ajax request
                  */
-                Yii::$app->getSession()->setFlash('success', $name . Yii::t('app', ' is successfully deleted.'));
+                Yii::$app->getSession()->setFlash('success', $model->name . Yii::t('app', ' is successfully deleted.'));
 
                 return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
             } else {
