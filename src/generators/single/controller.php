@@ -170,7 +170,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                         'growl' => [
                             'type' => 'success',
                             'icon' => 'glyphicon glyphicon-ok-sign',
-                            'title' => Yii::t('app', 'Create new <?= $modelClass ?>'),
+                            'title' => Yii::t('app', 'Create new <?= strtolower($modelClass) ?>'),
                             'message' => $model->name . Yii::t('app', ' is successfully created.'),
                         ]
                     ]),
@@ -182,7 +182,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             }
 
             return [
-                'title' => Yii::t('app', 'Create new <?= $modelClass ?>'),
+                'title' => Yii::t('app', 'Create new <?= strtolower($modelClass) ?>'),
                 'content' => $this->renderAjax('create', [
                     'model' => $model,
                 ]),
@@ -233,7 +233,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                         'growl' => [
                             'type' => 'success',
                             'icon' => 'glyphicon glyphicon-ok-sign',
-                            'title' => Yii::t('app', 'Update new <?= $modelClass ?>'),
+                            'title' => Yii::t('app', 'Update new <?= strtolower($modelClass) ?>'),
                             'message' => $model->name . Yii::t('app', ' is successfully updated.'),
                         ]
                     ]),
@@ -244,7 +244,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 ];
             } else {
                 return [
-                    'title' => Yii::t('app', 'Update <?= $modelClass ?> ') . $model->name,
+                    'title' => Yii::t('app', 'Update <?= strtolower($modelClass) ?> ') . $model->name,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),

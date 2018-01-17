@@ -55,9 +55,9 @@ CrudAsset::register($this);
             'toolbar'=> [
                 ['content'=>
                     Html::a(Html::icon('glyphicon glyphicon-plus'), ['create'],
-                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . Inflector::camel2id(StringHelper::basename($generator->modelClass))) ?>','class'=>'btn btn-default']).
+                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . Inflector::camel2id(StringHelper::basename($generator->modelClass))) ?>,'class'=>'btn btn-default']).
                     Html::a(Html::icon('glyphicon glyphicon-repeat'), [''],
-                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=> <?= $generator->generateString('Reset grid') ?>].
+                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=> <?= $generator->generateString('Reset grid') ?>]).
                     '{toggleData}'.
                     '{export}'
                 ],

@@ -65,8 +65,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>Yii::t('app', 'Are you sure?'),
-                          'data-confirm-message'=> Yii::t('app', 'Are you sure want to delete this item?'], 
+                          'data-confirm-title'=><?= $generator->generateString('Are you sure?') ?>,
+                          'data-confirm-message'=><?= $generator->generateString('Are you sure want to delete these items?') ?>, 
     ],
 
 ];   
