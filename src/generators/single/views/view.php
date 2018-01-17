@@ -36,7 +36,7 @@ use kartik\widgets\AlertBlock
         'enableEditMode' => false,
         'panel' => [
             'type' => 'primary',
-            'heading' => Html::icon('glyphicon glyphicon-tag') . ' ' . Yii::t('app', '<?= $modelClass ?> information'),
+            'heading' => Html::icon('glyphicon glyphicon-tag') . ' ' . Yii::t('app', '<?= $generator->modelClass ?> information'),
         ],
         'attributes' => [
 <?php
