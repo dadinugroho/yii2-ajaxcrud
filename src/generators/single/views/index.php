@@ -81,8 +81,8 @@ CrudAsset::register($this);
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=><?= $generator->generateString('Confirmation') ?>,
-                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete this item?') ?>,
+                                    'data-confirm-title'=><?= $generator->generateString('Bulk delete') ?>,
+                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete these items?') ?>,
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',
