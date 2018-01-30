@@ -421,4 +421,32 @@ if (count($pks) === 1) {
         ];
     }
 
+    /**
+     * Shows list of <?= strtolower($modelClass) . 's' ?>
+     * @param type $q
+     * @param type $id
+     * @return type
+     */
+    public function action<?= $modelClass . 's' ?>List($q = null, $id = null) {
+        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+
+        if (!empty($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                    ->from(<?= $modelClass ?>::tableName())
+                    ->where(['like', 'name', $q])
+                    ->andWhere(['status' => <?= $modelClass ?>::ACTIVE])
+                    ->limit(20);
+
+            $command = $query->createCommand();
+            $items = $command->queryAll();
+            $out['results'] = array_values($items);
+        } else if ($id > 0) {
+            $item = <?= $modelClass ?>::find($id);
+            $out['results'] = ['id' => $id, 'text' => $item->name];
+        }
+
+        return $out;
+    }
 }
