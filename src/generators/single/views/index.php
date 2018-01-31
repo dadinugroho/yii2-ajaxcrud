@@ -68,7 +68,7 @@ CrudAsset::register($this);
             'responsive' => true,          
             'panel' => [
                 'type' => 'primary', 
-                'heading' => Html::icon('glyphicon glyphicon-list') . ' ' . Yii::t('app', '<?=  $this->title ?> listing'),
+                'heading' => Html::icon('glyphicon glyphicon-list') . ' ' . Yii::t('app', '<?= $this->title ?> listing'),
                 'before' => AlertBlock::widget([
                     'useSessionFlash' => true,
                     'type' => AlertBlock::TYPE_ALERT
@@ -81,8 +81,8 @@ CrudAsset::register($this);
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=><?= $generator->generateString('Bulk delete') ?>,
-                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete these items?') ?>,
+                                    'data-confirm-title'=><?= $generator->generateString('Bulk delete ' . strtolower($modelClass)) ?>,
+                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete these ' . strtolower($modelClass) . '?') ?>,
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',

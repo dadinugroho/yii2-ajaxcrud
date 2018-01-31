@@ -37,18 +37,24 @@ return [
             echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
             echo "        // 'attribute'=>'" . $name . "',\n";
             echo "    // ],\n";
-        } else if (++$count < 6) {
+        } else if ('status' == $name) {
+            echo "    [\n";
+            echo "        'class'=>'\kartik\grid\BooleanColumn',\n";
+            echo "        'attribute'=>'" . $name . "',\n";
+            echo "        'format' => 'raw',\n";
+            echo "        'width' => '80px',\n";
+            echo "        'vAlign' => 'middle',\n";
+            echo "        'trueLabel' =>  Yii::t('app', 'Active'),\n";
+            echo "        'falseLabel' =>  Yii::t('app', 'Inactive'),\n";
+            echo "    ],\n";
+        } else {
             echo "    [\n";
             echo "        'class'=>'\kartik\grid\DataColumn',\n";
             echo "        'attribute'=>'" . $name . "',\n";
-            echo "        'width' => '100px',";
-            echo "        'vAlign' => 'middle',";
+            echo "        'width' => '100px',\n";
+            echo "        'vAlign' => 'middle',\n";
+            echo "        'hAlign' => 'center',\n";
             echo "    ],\n";
-        } else {
-            echo "    // [\n";
-            echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
-            echo "        // 'attribute'=>'" . $name . "',\n";
-            echo "    // ],\n";
         }
     }
     ?>
@@ -65,8 +71,8 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=><?= $generator->generateString('Delete item') ?>,
-                          'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete this item?') ?>], 
+                          'data-confirm-title'=><?= $generator->generateString('Delete ' . strtolower($modelClass)) ?>,
+                          'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete this ' . strtolower($modelClass) . '?') ?>], 
     ],
 
 ];   
