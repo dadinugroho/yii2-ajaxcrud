@@ -55,7 +55,7 @@ CrudAsset::register($this);
             'toolbar'=> [
                 ['content'=>
                     Html::a(Html::icon('glyphicon glyphicon-plus'), ['create'],
-                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . Inflector::camel2id(StringHelper::basename($generator->modelClass))) ?>,'class'=>'btn btn-default']).
+                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . strtolower($generator->modelClass)) ?>,'class'=>'btn btn-default']).
                     Html::a(Html::icon('glyphicon glyphicon-repeat'), [''],
                     ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=> <?= $generator->generateString('Reset grid') ?>]).
                     '{toggleData}'.
@@ -68,7 +68,7 @@ CrudAsset::register($this);
             'responsive' => true,          
             'panel' => [
                 'type' => 'primary', 
-                'heading' => Html::icon('glyphicon glyphicon-list') . ' ' . Yii::t('app', '<?= $this->title ?> listing'),
+                'heading' => Html::icon('glyphicon glyphicon-list') . ' ' . Yii::t('app', '<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?> listing'),
                 'before' => AlertBlock::widget([
                     'useSessionFlash' => true,
                     'type' => AlertBlock::TYPE_ALERT
@@ -81,8 +81,8 @@ CrudAsset::register($this);
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=><?= $generator->generateString('Bulk delete ' . strtolower($modelClass)) ?>,
-                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete these ' . strtolower($modelClass) . '?') ?>,
+                                    'data-confirm-title'=><?= $generator->generateString('Bulk delete ' . Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>,
+                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete these ' . Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) . '?') ?>,
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',
@@ -96,4 +96,9 @@ CrudAsset::register($this);
 ])?>'."\n"?>
 <?='<?php Modal::end(); ?>'?>
 
-<?= '<?php' ?> $this->registerJs('$.fn.modal.Constructor.prototype.enforceFocus = $.noop;'); ?>
+<?= '<?php' ?> $this->registerJs(
+        "$.fn.modal.Constructor.prototype.enforceFocus = $.noop;
+        $('#ajaxCrudModal').on('shown.bs.modal', function () {
+        $('#<?= strtolower($generator->modelClass) ?>-code').focus();
+        });"
+);?>
