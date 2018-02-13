@@ -88,6 +88,14 @@ function ModalRemote(modalId) {
     };
 
     /**
+     * Change modal header background
+     * @param {string} css for modal header background
+     */
+    this.setBackgroundHeader = function (backcss) {
+        $(this.header).removeClass('bg-primary bg-success bg-info bg-warning bg-danger').addClass(backcss);
+    };
+
+    /**
      * Set modal content
      * @param {string} content The content of modal content
      */
@@ -201,6 +209,7 @@ function ModalRemote(modalId) {
      */
     function errorRemoteResponse(response) {
         this.setTitle(response.status + response.statusText);
+        this.setBackgroundHeader('bg-danger');
         this.setContent(response.responseText);
         this.addFooterButton('Close', 'button', 'btn btn-default', function (button, event) {
             this.hide();
@@ -303,6 +312,7 @@ function ModalRemote(modalId) {
      */
     this.confirmModal = function (title, message, okLabel, cancelLabel, size, dataUrl, dataRequestMethod, selectedIds) {
         this.show();
+        this.setBackgroundHeader('bg-warning');
         this.setSize(size);
 
         if (title !== undefined) {
