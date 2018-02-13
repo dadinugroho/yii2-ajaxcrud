@@ -199,6 +199,7 @@ function ModalRemote(modalId) {
      */
     function beforeRemoteRequest() {
         this.show();
+        this.setBackgroundHeader('btn-info');
         this.displayLoading();
     }
 
