@@ -316,7 +316,7 @@ function ModalRemote(modalId) {
             this.addFooterButton(
                     okLabel === undefined ? this.defaults.okLabel : okLabel,
                     'submit',
-                    'btn btn-primary',
+                    'btn btn-warning',
                     function (e) {
                         var data;
 
