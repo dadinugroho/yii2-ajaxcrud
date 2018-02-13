@@ -92,7 +92,7 @@ function ModalRemote(modalId) {
      * @param {string} css for modal header background
      */
     this.setBackgroundHeader = function (backcss) {
-        $(this.header).removeClass('bg-primary bg-success bg-info bg-warning bg-danger').addClass(backcss);
+        $(this.header).removeClass('btn-primary btn-success btn-info btn-warning btn-danger').addClass(backcss);
     };
 
     /**
@@ -209,7 +209,7 @@ function ModalRemote(modalId) {
      */
     function errorRemoteResponse(response) {
         this.setTitle(response.status + response.statusText);
-        this.setBackgroundHeader('bg-danger');
+        this.setBackgroundHeader('btn-danger');
         this.setContent(response.responseText);
         this.addFooterButton('Close', 'button', 'btn btn-default', function (button, event) {
             this.hide();
@@ -312,7 +312,7 @@ function ModalRemote(modalId) {
      */
     this.confirmModal = function (title, message, okLabel, cancelLabel, size, dataUrl, dataRequestMethod, selectedIds) {
         this.show();
-        this.setBackgroundHeader('bg-warning');
+        this.setBackgroundHeader('btn-warning');
         this.setSize(size);
 
         if (title !== undefined) {
