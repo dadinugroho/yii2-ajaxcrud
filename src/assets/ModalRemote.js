@@ -249,6 +249,9 @@ function ModalRemote(modalId) {
         if (response.size !== undefined)
             this.setSize(response.size);
 
+        if (response.backgroundHeader !== undefined)
+            this.setBackgroundHeader(response.backgroundHeader);
+
         if (response.title !== undefined)
             this.setTitle(response.title);
 
