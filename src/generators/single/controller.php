@@ -42,6 +42,8 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use kartik\helpers\Html;
 use yii\db\Query;
+use yii\db\IntegrityException;
+use yii\db\Exception;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
@@ -61,7 +63,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'bulkdelete' => ['post'],
+                    'bulk-delete' => ['post'],
                 ],
             ],
         ];
@@ -125,7 +127,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> Yii::t('app', '<?= $modelClass ?> ' .  $model->name),
+                    'title'=> Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' <?= $modelClass ?> ' .  $model->name),
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -166,7 +168,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => Yii::t('app', '<?= $modelClass ?> ') . $model->name,
+                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' <?= $modelClass ?> ') . $model->name,
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                         'growl' => [
@@ -184,11 +186,11 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             }
 
             return [
-                'title' => Yii::t('app', 'Create new <?= strtolower($modelClass) ?>'),
+                'title' => Html::icon('glyphicon glyphicon-plus-sign white') . Yii::t('app', ' Create new <?= strtolower($modelClass) ?>'),
                 'content' => $this->renderAjax('create', [
                     'model' => $model,
                 ]),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
                 Html::button(Html::icon('glyphicon glyphicon-ok') . Yii::t('app', ' Create'), ['id' => 'btn-submit', 'class' => 'btn btn-success', 'type' => 'submit'])
             ];
         } else {
@@ -231,7 +233,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully updated.') ?>);
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => Yii::t('app', '<?= $modelClass ?> ') . $model->name,
+                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' <?= $modelClass ?> ') . $model->name,
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                         'growl' => [
@@ -248,7 +250,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 ];
             } else {
                 return [
-                    'title' => Yii::t('app', 'Update <?= strtolower($modelClass) ?> ') . $model->name,
+                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' Update <?= strtolower($modelClass) ?> ') . $model->name,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -261,7 +263,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully deleted.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully updated.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
                 return $this->render('update', [
@@ -294,12 +296,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
             $transaction->commit();
 
+            Yii::$app->getSession()->setFlash('success', $model->name . Yii::t('app', ' is successfully deleted.'));
+
             if ($request->isAjax) {
                 /*
                  *   Process for ajax request
                  */
-                Yii::$app->getSession()->setFlash('success', $model->name . Yii::t('app', ' is successfully deleted.'));
-
                 return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
             } else {
                 /*
@@ -310,18 +312,20 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         } catch (IntegrityException $e) {
             $transaction->rollBack();
             return [
-            'title' => Yii::t('app', 'Delete <?= strtolower($modelClass) ?>'),
-                'size' => 'large',
-                'content' => Html::tag('span', Yii::t('app', 'Integrity error!'), ['class' => 'text-error']),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>'),
+                'size' => 'normal',
+                'backgroundHeader' => 'btn-danger',
+                'content' => Html::tag('span', Yii::t('app', 'Integrity error!'), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
             ];
         } catch (Exception $e) {
             $transaction->rollBack();
             return [
-                'title' => Yii::t('app', 'Delete <?= strtolower($modelClass) ?>'),
-                'size' => 'large',
-                'content' => Html::tag('span', Yii::t('app', 'Exception error!'), ['class' => 'text-error']),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>'),
+                'size' => 'normal',
+                'backgroundHeader' => 'btn-danger',
+                'content' => Html::tag('span', Yii::t('app', 'Exception error!'), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
             ];
         }
     }
@@ -337,26 +341,52 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {        
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
         
-        Yii::$app->getSession()->setFlash('success', <?= $generator->generateString('Items are successfully deleted.') ?>);
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        try {
+            foreach ( $pks as $pk ) {
+                $model = $this->findModel($pk);
+                $model->delete();
+            }
+
+            $transaction->commit();
+        
+            Yii::$app->getSession()->setFlash('success', <?= $generator->generateString($modelClass . 's are successfully deleted.') ?>);
+
+            if($request->isAjax){
+                /*
+                *   Process for ajax request
+                */
+                return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+            }else{
+                /*
+                *   Process for non-ajax request
+                */
+                return $this->redirect(['index']);
+            }
+        } catch (IntegrityException $e) {
+            $transaction->rollBack();
+            return [
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>s'),
+                'size' => 'normal',
+                'backgroundHeader' => 'btn-danger',
+                'content' => Html::tag('span', Yii::t('app', 'Integrity error!'), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
+            ];
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            return [
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>s'),
+                'size' => 'normal',
+                'backgroundHeader' => 'btn-danger',
+                'content' => Html::tag('span', Yii::t('app', 'Exception error!'), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
+            ];
         }
-       
     }
 
     /**

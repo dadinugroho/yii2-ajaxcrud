@@ -25,7 +25,7 @@ use kartik\alert\AlertBlock;
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>;
+$this->title = ['label' => Yii::t('app', '<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
@@ -75,14 +75,16 @@ CrudAsset::register($this);
                 ]),
                 'after'=>BulkButtonWidget::widget([
                             'buttons'=>Html::a(Html::icon('glyphicon glyphicon-trash') . Yii::t('app', ' Delete all'),
-                                ["bulk-delete"] ,
+                                ['bulk-delete'] ,
                                 [
-                                    "class"=>"btn btn-danger btn-xs",
+                                    'class'=>'btn btn-danger btn-xs',
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=><?= $generator->generateString('Bulk delete ' . strtolower(Inflector::pluralize(StringHelper::basename($generator->modelClass)))) ?>,
-                                    'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete these ' . strtolower(Inflector::pluralize(StringHelper::basename($generator->modelClass))) . '?') ?>,
+                                    'data-confirm-title' => Html::icon('glyphicon glyphicon-warning-sign white') . Yii::t('app', ' Bulk delete <?= strtolower($generator->modelClass) ?>s'),
+                                    'data-confirm-message' => Yii::t('app', 'Are you sure you want to delete these <?= strtolower($generator->modelClass) ?>s?'),
+                                    'data-confirm-ok' => Html::icon('glyphicon glyphicon-ok') . Yii::t('app', ' Yes'),
+                                    'data-confirm-cancel' => Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' No'),
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',
@@ -90,10 +92,10 @@ CrudAsset::register($this);
         ])<?="?>\n"?>
     </div>
 </div>
-<?='<?php Modal::begin([
-    "id"=>"ajaxCrudModal",
-    "footer"=>"",// always need it for jquery plugin
-])?>'."\n"?>
+<?="<?php Modal::begin([
+    'id'=>'ajaxCrudModal',
+    'footer'=>'', // always need it for jquery plugin
+])?>" . "\n"?>
 <?='<?php Modal::end(); ?>'?>
 
 <?= '<?php' ?> $this->registerJs(

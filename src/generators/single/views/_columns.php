@@ -71,8 +71,10 @@ return [
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=><?= $generator->generateString('Delete ' . strtolower($modelClass)) ?>,
-                          'data-confirm-message'=><?= $generator->generateString('Are you sure you want to delete this ' . strtolower($modelClass) . '?') ?>], 
+                          'data-confirm-title' => Html::icon('glyphicon glyphicon-warning-sign white') . <?= $generator->generateString(' Delete ' . strtolower($modelClass)) ?>,
+                          'data-confirm-message' => <?= $generator->generateString('Are you sure you want to delete this ' . strtolower($modelClass) . '?') ?>,
+                          'data-confirm-ok' => Html::icon('glyphicon glyphicon-ok') . Yii::t('app', ' Yes'),
+                          'data-confirm-cancel' => Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' No')],
     ],
 
 ];   

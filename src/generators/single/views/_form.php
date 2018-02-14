@@ -57,7 +57,7 @@ use kartik\widgets\ActiveForm;
 </div>
 
 <script text="javascript">
-    $('form').on("keydown", function (e) {
+    $('form').on('keydown', function (e) {
         if (13 == e.which) {
             $('#btn-submit').click();
         }
