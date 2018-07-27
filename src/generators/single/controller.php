@@ -100,46 +100,24 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
      * @return mixed
      */
-    public function actionView(<?= $actionParams ?>, $act = null)
+    public function actionView(<?= $actionParams ?>)
     {   
         $request = Yii::$app->request;
         
-         if ('prev' == $act) {
-            $id = (new Query())
-                    ->select('id')
-                    ->from(<?= $modelClass ?>::tableName())
-                    ->where('id < :id', [':id' => $id])
-                    ->orderBy('id DESC')
-                    ->scalar();
-        } else if ('next' == $act) {
-            $id = (new Query())
-                    ->select('id')
-                    ->from(<?= $modelClass ?>::tableName())
-                    ->where('id > :id', [':id' => $id])
-                    ->orderBy('id ASC')
-                    ->scalar();
-        }
-        
         $model = $this->findModel(<?= $actionParams ?>);
-        
-        $links = $this->composeNavLinks($id, $act);
         
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' <?= $modelClass ?> ' .  $model->name),
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer' => Html::tag('div', $links['firstLink'] . $links['prevLink'] . Html::button(Html::icon('glyphicon glyphicon-remove'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']), ['class' => 'btn-group pull-left', 'style' => 'margin-right: 5px;']) .
-                    Html::a(Html::icon('glyphicon glyphicon-pencil') . Yii::t('app', ' Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-warning', 'role' => 'modal-remote']) .
-                    Html::a(Html::icon('glyphicon glyphicon-plus') . Yii::t('app', ' Create more'), ['create'], ['class' => 'btn btn-success', 'role' => 'modal-remote']) .
-                    Html::tag('div', Html::a(Html::icon('glyphicon glyphicon-refresh'), ['view', 'id' => $model->id], ['id' => 'btn_ref', 'class' => 'btn btn-default', 'role' => 'modal-remote']) . $links['nextLink'] . $links['lastLink'], ['class' => 'btn-group', 'style' => 'margin-left: 5px;'])
+                    'title'=> Html::icon('glyphicon glyphicon-info-sign white') . ' ' . Yii::t('app', '<?= $modelClass ?>') . ' ' .  $model->name,
+                    'content'=>$this->renderAjax('view', ['model' => $model]),
+                    'footer' => Html::button(Html::icon('glyphicon glyphicon-remove'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
+                    Html::a(Html::icon('glyphicon glyphicon-pencil') . ' ' . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-warning', 'role' => 'modal-remote']) .
+                    Html::a(Html::icon('glyphicon glyphicon-plus') . ' ' . Yii::t('app', 'Create more'), ['create'], ['class' => 'btn btn-success', 'role' => 'modal-remote']) .
+                    Html::a(Html::icon('glyphicon glyphicon-refresh'), ['view', 'id' => $model->id], ['id' => 'btn_ref', 'class' => 'btn btn-default', 'role' => 'modal-remote'])
                 ];    
-        }else{
-            return $this->render('view', [
-                'model' => $model,
-            ]);
+        } else {
+            return $this->render('view', ['model' => $model]);
         }
     }
 
@@ -161,49 +139,34 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             
             if ($model->load($request->post()) && $model->save()) {
-
-                $links = $this->composeNavLinks($model->id);
-                
-                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully created.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . ' ' . <?= $generator->generateString('is successfully created.') ?>);
 
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' <?= $modelClass ?> ') . $model->name,
-                    'content' => $this->renderAjax('view', [
-                        'model' => $model,
-                        'growl' => [
-                            'type' => 'success',
-                            'icon' => 'glyphicon glyphicon-ok-sign',
-                            'title' => Yii::t('app', 'Create new <?= strtolower($modelClass) ?>'),
-                            'message' => $model->name . Yii::t('app', ' is successfully created.'),
-                        ]
-                    ]),
-                    'footer' => Html::tag('div', $links['firstLink'] . $links['prevLink'] . Html::button(Html::icon('glyphicon glyphicon-remove'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']), ['class' => 'btn-group pull-left', 'style' => 'margin-right: 5px;']) .
-                    Html::a(Html::icon('glyphicon glyphicon-pencil') . Yii::t('app', ' Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-warning', 'role' => 'modal-remote']) .
-                    Html::a(Html::icon('glyphicon glyphicon-plus') . Yii::t('app', ' Create more'), ['create'], ['class' => 'btn btn-success', 'role' => 'modal-remote']) .
-                    Html::tag('div', Html::a(Html::icon('glyphicon glyphicon-refresh'), ['view', 'id' => $model->id], ['id' => 'btn_ref', 'class' => 'btn btn-default', 'role' => 'modal-remote']) . $links['nextLink'] . $links['lastLink'], ['class' => 'btn-group', 'style' => 'margin-left: 5px;'])
+                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . ' ' . Yii::t('app', '<?= $modelClass ?>') . ' ' . $model->name,
+                    'content' => $this->renderAjax('view', ['model' => $model]),
+                    'footer' => Html::button(Html::icon('glyphicon glyphicon-remove'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
+                    Html::a(Html::icon('glyphicon glyphicon-pencil') . ' ' . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-warning', 'role' => 'modal-remote']) .
+                    Html::a(Html::icon('glyphicon glyphicon-plus') . ' ' . Yii::t('app', 'Create more'), ['create'], ['class' => 'btn btn-success', 'role' => 'modal-remote']) .
+                    Html::a(Html::icon('glyphicon glyphicon-refresh'), ['view', 'id' => $model->id], ['id' => 'btn_ref', 'class' => 'btn btn-default', 'role' => 'modal-remote'])
                 ];
             }
 
             return [
-                'title' => Html::icon('glyphicon glyphicon-plus-sign white') . Yii::t('app', ' Create new <?= strtolower($modelClass) ?>'),
-                'content' => $this->renderAjax('create', [
-                    'model' => $model,
-                ]),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
-                Html::button(Html::icon('glyphicon glyphicon-ok') . Yii::t('app', ' Create'), ['id' => 'btn-submit', 'class' => 'btn btn-success', 'type' => 'submit'])
+                'title' => Html::icon('glyphicon glyphicon-plus-sign white') . ' ' . Yii::t('app', 'Create new <?= strtolower($modelClass) ?>'),
+                'content' => $this->renderAjax('create', ['model' => $model]),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
+                Html::button(Html::icon('glyphicon glyphicon-ok') . ' ' . Yii::t('app', 'Create'), ['id' => 'btn-submit', 'class' => 'btn btn-success', 'type' => 'submit'])
             ];
         } else {
             /*
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully created.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . ' ' . <?= $generator->generateString('is successfully created.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
+                return $this->render('create', ['model' => $model]);
             }
         }
        
@@ -220,8 +183,6 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     {
         $request = Yii::$app->request;
         $model = $this->findModel(<?= $actionParams ?>); 
-        
-        $links = $this->composeNavLinks($id);
 
         if($request->isAjax){
             /*
@@ -230,45 +191,33 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully updated.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . ' ' . <?= $generator->generateString('is successfully updated.') ?>);
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' <?= $modelClass ?> ') . $model->name,
-                    'content' => $this->renderAjax('view', [
-                        'model' => $model,
-                        'growl' => [
-                            'type' => 'success',
-                            'icon' => 'glyphicon glyphicon-ok-sign',
-                            'title' => Yii::t('app', 'Update new <?= strtolower($modelClass) ?>'),
-                            'message' => $model->name . Yii::t('app', ' is successfully updated.'),
-                        ]
-                    ]),
-                    'footer' => Html::tag('div', $links['firstLink'] . $links['prevLink'] . Html::button(Html::icon('glyphicon glyphicon-remove'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']), ['class' => 'btn-group pull-left', 'style' => 'margin-right: 5px;']) .
-                    Html::a(Html::icon('glyphicon glyphicon-pencil') . Yii::t('app', ' Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-warning', 'role' => 'modal-remote']) .
-                    Html::a(Html::icon('glyphicon glyphicon-plus') . Yii::t('app', ' Create more'), ['create'], ['class' => 'btn btn-success', 'role' => 'modal-remote']) .
-                    Html::tag('div', Html::a(Html::icon('glyphicon glyphicon-refresh'), ['view', 'id' => $model->id], ['id' => 'btn_ref', 'class' => 'btn btn-default', 'role' => 'modal-remote']) . $links['nextLink'] . $links['lastLink'], ['class' => 'btn-group', 'style' => 'margin-left: 5px;'])
+                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . ' ' . Yii::t('app', '<?= $modelClass ?>') . ' ' . $model->name,
+                    'content' => $this->renderAjax('view', ['model' => $model]),
+                    'footer' => Html::button(Html::icon('glyphicon glyphicon-remove'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
+                    Html::a(Html::icon('glyphicon glyphicon-pencil') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-warning', 'role' => 'modal-remote']) .
+                    Html::a(Html::icon('glyphicon glyphicon-plus') . Yii::t('app', 'Create more'), ['create'], ['class' => 'btn btn-success', 'role' => 'modal-remote']) .
+                    Html::a(Html::icon('glyphicon glyphicon-refresh'), ['view', 'id' => $model->id], ['id' => 'btn_ref', 'class' => 'btn btn-default', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
-                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . Yii::t('app', ' Update <?= strtolower($modelClass) ?> ') . $model->name,
-                    'content' => $this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
-                    Html::button(Html::icon('glyphicon glyphicon-ok') . Yii::t('app', ' Save'), ['id' => 'btn-submit', 'class' => 'btn btn-success', 'type' => 'submit'])
+                    'title' => Html::icon('glyphicon glyphicon-info-sign white') . ' ' . Yii::t('app', 'Update <?= strtolower($modelClass) ?>') . ' ' . $model->name,
+                    'content' => $this->renderAjax('update', ['model' => $model]),
+                    'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal']) .
+                    Html::button(Html::icon('glyphicon glyphicon-ok') . ' ' . Yii::t('app', 'Save'), ['id' => 'btn-submit', 'class' => 'btn btn-success', 'type' => 'submit'])
                 ];
             }
-        }else{
+        } else {
             /*
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                Yii::$app->getSession()->setFlash('success', $model->name . <?= $generator->generateString(' is successfully updated.') ?>);
+                Yii::$app->getSession()->setFlash('success', $model->name . ' ' . <?= $generator->generateString('is successfully updated.') ?>);
                 return $this->redirect(['view', <?= $urlParams ?>]);
             } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+                return $this->render('update', ['model' => $model]);
             }
         }
     }
@@ -296,7 +245,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
             $transaction->commit();
 
-            Yii::$app->getSession()->setFlash('success', $model->name . Yii::t('app', ' is successfully deleted.'));
+            Yii::$app->getSession()->setFlash('success', $name . ' ' . Yii::t('app', 'is successfully deleted.'));
 
             if ($request->isAjax) {
                 /*
@@ -312,20 +261,20 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         } catch (IntegrityException $e) {
             $transaction->rollBack();
             return [
-                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>'),
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . ' ' . Yii::t('app', 'Delete <?= strtolower($modelClass) ?>'),
                 'size' => 'normal',
                 'backgroundHeader' => 'btn-danger',
-                'content' => Html::tag('span', Yii::t('app', 'Integrity error!'), ['class' => 'text-danger']),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
+                'content' => Html::tag('span', 'Integrity error! ' . $e->getMessage(), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
             ];
         } catch (Exception $e) {
             $transaction->rollBack();
             return [
-                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>'),
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . ' ' . Yii::t('app', 'Delete <?= strtolower($modelClass) ?>'),
                 'size' => 'normal',
                 'backgroundHeader' => 'btn-danger',
-                'content' => Html::tag('span', Yii::t('app', 'Exception error!'), ['class' => 'text-danger']),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
+                'content' => Html::tag('span', 'Exception error! ' . $e->getMessage, ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
             ];
         }
     }
@@ -371,20 +320,20 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         } catch (IntegrityException $e) {
             $transaction->rollBack();
             return [
-                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>s'),
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . ' ' . Yii::t('app', 'Delete <?= strtolower($modelClass) ?>s'),
                 'size' => 'normal',
                 'backgroundHeader' => 'btn-danger',
-                'content' => Html::tag('span', Yii::t('app', 'Integrity error!'), ['class' => 'text-danger']),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
+                'content' => Html::tag('span', 'Integrity error! ' . $e->getMessage(), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
             ];
         } catch (Exception $e) {
             $transaction->rollBack();
             return [
-                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . Yii::t('app', ' Delete  <?= strtolower($modelClass) ?>s'),
+                'title' => Html::icon('glyphicon glyphicon-exclamation-sign white') . ' ' . Yii::t('app', 'Delete <?= strtolower($modelClass) ?>s'),
                 'size' => 'normal',
                 'backgroundHeader' => 'btn-danger',
-                'content' => Html::tag('span', Yii::t('app', 'Exception error!'), ['class' => 'text-danger']),
-                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
+                'content' => Html::tag('span', 'Exception error! ' . $e->getMessage(), ['class' => 'text-danger']),
+                'footer' => Html::button(Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => 'modal'])
             ];
         }
     }
@@ -416,41 +365,6 @@ if (count($pks) === 1) {
         }
     }
     
-    
-    /**
-     * Compose Navigation Links
-     * @return array of navigation links
-     */
-    private function composeNavLinks($id) {
-        $row = (new Query())
-                ->select(['first' => 'MIN(id)', 'last' => 'MAX(id)'])
-                ->from(<?= $modelClass ?>::tableName())
-                ->one();
-
-        $firstRow = $row['first'];
-        $lastRow = $row['last'];
-
-        $firstLink = Html::a(Html::icon('glyphicon glyphicon-fast-backward'), ['view', 'id' => $firstRow], ['class' => 'btn btn-info pull-left', 'role' => 'modal-remote']);
-        $prevLink = Html::a(Html::icon('glyphicon glyphicon-step-backward'), ['view', 'id' => $id, 'act' => 'prev'], ['class' => 'btn btn-info pull-left', 'role' => 'modal-remote']);
-        $nextLink = Html::a(Html::icon('glyphicon glyphicon-step-forward'), ['view', 'id' => $id, 'act' => 'next'], ['class' => 'btn btn-info', 'role' => 'modal-remote']);
-        $lastLink = Html::a(Html::icon('glyphicon glyphicon-fast-forward'), ['view', 'id' => $lastRow], ['class' => 'btn btn-info', 'role' => 'modal-remote']);
-
-        if ($id == $firstRow) {
-            $firstLink = Html::button(Html::icon('glyphicon glyphicon-fast-backward'), ['disabled' => true, 'class' => 'btn btn-info pull-left', 'role' => 'modal-remote']);
-            $prevLink = Html::button(Html::icon('glyphicon glyphicon-step-backward'), ['disabled' => true, 'class' => 'btn btn-info pull-left', 'role' => 'modal-remote']);
-        } else if ($id == $lastRow) {
-            $nextLink = Html::button(Html::icon('glyphicon glyphicon-step-forward'), ['disabled' => true, 'class' => 'btn btn-info', 'role' => 'modal-remote']);
-            $lastLink = Html::button(Html::icon('glyphicon glyphicon-fast-forward'), ['disabled' => true, 'class' => 'btn btn-info', 'role' => 'modal-remote']);
-        }
-
-        return [
-            'firstLink' => $firstLink,
-            'prevLink' => $prevLink,
-            'nextLink' => $nextLink,
-            'lastLink' => $lastLink,
-        ];
-    }
-
     /**
      * Shows list of <?= strtolower($modelClass) . 's' ?>
      * @param type $q

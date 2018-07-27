@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $generator yii\gii\generators\crud\Generator */
-
+$modelClass = StringHelper::basename($generator->modelClass);
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
 echo "<?php\n";
@@ -25,9 +25,6 @@ use kartik\alert\AlertBlock;
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = ['label' => Yii::t('app', '<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-
 CrudAsset::register($this);
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index">
@@ -38,6 +35,7 @@ CrudAsset::register($this);
             'filterModel' => $searchModel,
             'pjax'=>true,
             'columns' => require(__DIR__.'/_columns.php'),
+            'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => ''],
             'options' => [
                 'style' => 'overflow: auto; word-wrap: break-word;'
             ],
@@ -55,7 +53,7 @@ CrudAsset::register($this);
             'toolbar'=> [
                 ['content'=>
                     Html::a(Html::icon('glyphicon glyphicon-plus'), ['create'],
-                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . strtolower($generator->modelClass)) ?>,'class'=>'btn btn-default']).
+                    ['role'=>'modal-remote','title'=><?= $generator->generateString('Create new ' . strtolower($modelClass)) ?>,'class'=>'btn btn-default']).
                     Html::a(Html::icon('glyphicon glyphicon-repeat'), [''],
                     ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=> <?= $generator->generateString('Reset grid') ?>]).
                     '{toggleData}'.
@@ -65,6 +63,7 @@ CrudAsset::register($this);
             'striped' => true,
             'bordered' => true,
             'condensed' => true,
+            'hover' => true,
             'responsive' => true,          
             'panel' => [
                 'type' => 'primary', 
@@ -74,17 +73,17 @@ CrudAsset::register($this);
                     'type' => AlertBlock::TYPE_ALERT
                 ]),
                 'after'=>BulkButtonWidget::widget([
-                            'buttons'=>Html::a(Html::icon('glyphicon glyphicon-trash') . Yii::t('app', ' Delete all'),
+                            'buttons'=>Html::a(Html::icon('glyphicon glyphicon-trash') . ' ' . Yii::t('app', 'Delete all'),
                                 ['bulk-delete'] ,
                                 [
                                     'class'=>'btn btn-danger btn-xs',
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title' => Html::icon('glyphicon glyphicon-warning-sign white') . Yii::t('app', ' Bulk delete <?= strtolower($generator->modelClass) ?>s'),
-                                    'data-confirm-message' => Yii::t('app', 'Are you sure you want to delete these <?= strtolower($generator->modelClass) ?>s?'),
-                                    'data-confirm-ok' => Html::icon('glyphicon glyphicon-ok') . Yii::t('app', ' Yes'),
-                                    'data-confirm-cancel' => Html::icon('glyphicon glyphicon-remove') . Yii::t('app', ' No'),
+                                    'data-confirm-title' => Html::icon('glyphicon glyphicon-warning-sign white') . ' ' . Yii::t('app', 'Bulk delete <?= strtolower($modelClass) ?>s'),
+                                    'data-confirm-message' => Yii::t('app', 'Are you sure you want to delete these <?= strtolower($modelClass) ?>s?'),
+                                    'data-confirm-ok' => Html::icon('glyphicon glyphicon-ok') . ' ' . Yii::t('app', 'Yes'),
+                                    'data-confirm-cancel' => Html::icon('glyphicon glyphicon-remove') . ' ' . Yii::t('app', 'No'),
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',
@@ -101,6 +100,6 @@ CrudAsset::register($this);
 <?= '<?php' ?> $this->registerJs(
         "$.fn.modal.Constructor.prototype.enforceFocus = $.noop;
         $('#ajaxCrudModal').on('shown.bs.modal', function () {
-        $('#<?= strtolower($generator->modelClass) ?>-code').focus();
+        $('#<?= strtolower($modelClass) ?>-code').focus();
         });"
 );?>
