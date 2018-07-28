@@ -67,7 +67,7 @@ CrudAsset::register($this);
             'responsive' => true,          
             'panel' => [
                 'type' => 'primary', 
-                'heading' => Html::icon('glyphicon glyphicon-list') . ' ' . Yii::t('app', '<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?> listing'),
+                'heading' => Html::icon('glyphicon glyphicon-list') . ' ' . Yii::t('app', '<?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?> listing'),
                 'before' => AlertBlock::widget([
                     'useSessionFlash' => true,
                     'type' => AlertBlock::TYPE_ALERT
