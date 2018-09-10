@@ -192,6 +192,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             
             if ($model->load($request->post()) && $model->save()) {
                 Yii::$app->getSession()->setFlash('success', $model->name . ' ' . <?= $generator->generateString('is successfully updated.') ?>);
+                
                 return [
                     'forceReload' => '#crud-datatable-pjax',
                     'title' => Html::icon('glyphicon glyphicon-info-sign white') . ' ' . Yii::t('app', '<?= $modelClass ?>') . ' ' . $model->name,

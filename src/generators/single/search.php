@@ -24,7 +24,6 @@ echo "<?php\n";
 
 namespace <?= StringHelper::dirname(ltrim($generator->searchModelClass, '\\')) ?>;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") ?>;
@@ -67,6 +66,14 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'name' => SORT_ASC
+                ]
+            ],
         ]);
 
         $this->load($params);

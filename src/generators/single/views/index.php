@@ -97,9 +97,4 @@ CrudAsset::register($this);
 ])?>" . "\n"?>
 <?='<?php Modal::end(); ?>'?>
 
-<?= '<?php' ?> $this->registerJs(
-        "$.fn.modal.Constructor.prototype.enforceFocus = $.noop;
-        $('#ajaxCrudModal').on('shown.bs.modal', function () {
-        $('#<?= strtolower($modelClass) ?>-code').focus();
-        });"
-);?>
+<?= '<?php' ?> $this->registerJs("$.fn.modal.Constructor.prototype.enforceFocus = $.noop;");?>

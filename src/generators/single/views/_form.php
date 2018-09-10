@@ -31,7 +31,7 @@ use kartik\widgets\ActiveForm;
         <span class="col-md-4">
             
         </span>
-        <span class="col-md-8 text-right">
+        <span class="col-md-8">
             
         </span>
     </div>
