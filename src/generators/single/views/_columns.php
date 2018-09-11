@@ -34,10 +34,10 @@ return [
     $count = 0;
     foreach ($generator->getColumnNames() as $name) {   
         if ($name=='id'||$name=='created_at'||$name=='updated_at'){
-            echo "    // [\n";
-            echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
-            echo "        // 'attribute'=>'" . $name . "',\n";
-            echo "    // ],\n";
+//            echo "    // [\n";
+//            echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
+//            echo "        // 'attribute'=>'" . $name . "',\n";
+//            echo "    // ],\n";
         } else if ('status' == $name) {
             echo "    [\n";
             echo "        'class'=>'\kartik\grid\BooleanColumn',\n";
@@ -55,6 +55,9 @@ return [
             echo "        'width' => '100px',\n";
             echo "        'vAlign' => 'middle',\n";
             echo "        'hAlign' => 'center',\n";
+            echo "        'headerOptions' => [\n";
+            echo "            'class' => 'text-center',\n";
+            echo "        ]\n";
             echo "    ],\n";
         }
     }
