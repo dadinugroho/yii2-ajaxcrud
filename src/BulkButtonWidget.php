@@ -14,7 +14,7 @@ class BulkButtonWidget extends Widget {
 
     public function run() {
         $content = '<div class="pull-left">' .
-                '<span class="glyphicon glyphicon-arrow-right"></span>' .
+                '<span class="glyphicon glyphicon-arrow-right"></span>&nbsp;&nbsp;' .
                 $this->buttons .
                 '</div>';
         return $content;
